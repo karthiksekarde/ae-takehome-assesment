@@ -1,0 +1,61 @@
+services:
+  postgres:
+    container_name: deel-airflow-postgres
+    hostname: airflow-postgres
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - ../airflow/db-data:/var/lib/postgresql/data
+    networks:
+      - deel-platform
+    restart: always
+
+  local-runner:
+    container_name: deel-airflow-local-runner
+    hostname: airflow-local-runner
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=Local
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - ../airflow/dags:/usr/local/airflow/dags
+      - ../airflow/plugins:/usr/local/airflow/plugins
+      - ../airflow/requirements:/usr/local/airflow/requirements
+      - ../airflow/startup_script:/usr/local/airflow/startup
+      - ../airflow/input-files:/usr/local/airflow/input-files
+      - ../dbt:/usr/local/airflow/dbt
+      - ../dbt_project.yml:/usr/local/airflow/dbt_project.yml
+      - ../profiles.yml:/usr/local/airflow/profiles.yml
+    ports:
+      - "7777:8080"
+    command: local-runner
+    networks:
+      - deel-platform
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    env_file:
+      - ../airflow/config/.env.localrunner
+
+networks:
+  deel-platform:
+    driver: bridge
+

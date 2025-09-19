@@ -1,0 +1,30 @@
+name: 'deel_analytics'
+version: '1.0.0'
+config-version: 2
+
+profile: 'deel_analytics'
+
+model-paths: ["dbt/models"]
+analysis-paths: ["dbt/analyses"]
+test-paths: ["dbt/tests"]
+seed-paths: ["dbt/data"]
+macro-paths: ["dbt/macros"]
+snapshot-paths: ["dbt/snapshots"]
+
+target-path: "dbt/target"
+clean-targets:
+  - "dbt/target"
+  - "dbt/dbt_packages"
+
+models:
+  deel_analytics:
+    staging:
+      +materialized: table
+      +schema: deel_analytics_staging
+      +on_schema_change: ignore
+    core:
+      +materialized: incremental
+      +schema: deel_analytics_core
+      +on_schema_change: ignore
+      dim_organization:
+        +materialized: table 

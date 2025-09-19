@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: Raw data from MinIO via ClickHouse external tables
+    database: deel_analytics
+    schema: deel_analytics
+    tables:
+      - name: organizations_raw
+        description: Raw organization data
+        columns:
+          - name: organization_id
+            description: Unique organization identifier
+          - name: first_payment_date
+            description: Date of first payment
+          - name: last_payment_date
+            description: Date of last payment
+          - name: legal_entity_country_code
+            description: Country code for legal entity
+          - name: count_total_contracts_active
+            description: Number of active contracts
+          - name: created_date
+            description: Organization creation timestamp
+
+      - name: invoices_raw
+        description: Raw invoice data
+        columns:
+          - name: invoice_id
+            description: Unique invoice identifier
+          - name: organization_id
+            description: Organization this invoice belongs to
+          - name: status
+            description: Invoice status
+          - name: amount
+            description: Invoice amount
+          - name: created_at
+            description: Invoice creation timestamp

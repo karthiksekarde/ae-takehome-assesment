@@ -1,0 +1,12 @@
+deel_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: clickhouse
+      host: deel-data-warehouse
+      port: 8123
+      user: default
+      password: "password"
+      database: deel_analytics
+      schema: deel_analytics
+      secure: false

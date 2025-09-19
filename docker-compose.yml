@@ -1,0 +1,3 @@
+include:
+  - airflow/compose.yml
+  - storage/compose.yml
