@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: stg_organizations
+    description: Cleaned organization data
+    columns:
+      - name: organization_id
+        description: Unique organization identifier
+        data_type: string
+      - name: first_payment_date
+        description: Date of first payment
+        data_type: date
+      - name: last_payment_date
+        description: Date of last payment
+        data_type: date
+      - name: legal_entity_country_code
+        description: Country code for legal entity
+        data_type: string
+      - name: count_total_contracts_active
+        description: Number of active contracts
+        data_type: int
+      - name: created_date
+        description: Organization creation timestamp
+        data_type: timestamp
+
+  - name: stg_invoices
+    description: Cleaned invoice data (paid invoices only)
+    columns:
+      - name: invoice_id
+        description: Unique invoice identifier
+        data_type: string
+      - name: organization_id
+        description: Organization this invoice belongs to
+        data_type: string
+      - name: type
+        description: Invoice type
+        data_type: string
+      - name: status
+        description: Invoice status (filtered to paid only)
+        data_type: string
+      - name: currency
+        description: Invoice currency
+        data_type: string
+      - name: amount
+        description: Invoice amount
+        data_type: float
+      - name: invoice_date
+        description: Invoice creation date
+        data_type: date
